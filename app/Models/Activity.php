@@ -24,7 +24,7 @@ class Activity extends Model
         return $this->belongsTo(Course::class);
     }
 
-    public function role(){
-        return $this->hasMany(Role::class);
-    }
+    // public function role(){
+    //     return $this->hasMany(Role::class);
+    // }
 }

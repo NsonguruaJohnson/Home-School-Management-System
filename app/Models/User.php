@@ -50,10 +50,15 @@ class User extends Authenticatable
     }
 
     public function course(){
-        return $this->belongsTo(Course::class);
+        // return $this->belongsTo(Course::class);
+        return $this->hasMany(Course::class);
     }
 
+    // public function activity(){
+    //     return $this->Hasmany(Activity::class);
+    // }
+
     public function activity(){
-        return $this->Hasmany(Activity::class);
+        return $this->hasOneThrough(Activity::class, Course::class);
     }
 }

@@ -17,6 +17,7 @@ class CreateActivitiesTable extends Migration
             $table->id();
             $table->string('name');
             $table->text('description');
+            $table->string('course_id');
             $table->integer('user_id')->nullable();
             $table->integer('teacher_id')->nullable();
             $table->timestamps();

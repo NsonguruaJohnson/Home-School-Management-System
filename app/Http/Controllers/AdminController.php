@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Course;
 use App\Models\Activity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -19,16 +20,19 @@ class AdminController extends Controller
     }
 
     public function index(){
-        $teachers = User::where('role_id', 2)->get();
-        // dd($teachers);
+        $courses = Course::get();
+        $teachers = User::where('role_id', 2)->with('course')->get();
         $students = User::where('role_id', 3)->latest()->get();
         $roles = Role::get();
-        $activity = Activity::get();
+        $activities = Activity::get();
+        // dd($teachers);
+        // dd(User::where('role_id', 2)->get());
         return view('admin.dashboard', [
+            'courses' => $courses,
             'teachers' => $teachers,
             'students' => $students,
             'roles' => $roles,
-            'activity' => $activity
+            'activities' => $activities
         ]);
     }
 
@@ -60,7 +64,7 @@ class AdminController extends Controller
     }
 
     public function updateTeacher(Request $request, User $user){
-        dd($user);
+        // dd($user);
 
         $this->validate($request, [
             'name' => 'required',

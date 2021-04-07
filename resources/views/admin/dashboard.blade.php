@@ -111,10 +111,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{-- <p class="mt-3 mb-0 text-sm">
-                                    <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
-                                    <span class="text-nowrap">Since last month</span>
-                                </p> --}}
                             </div>
                         </div>
                     </div>
@@ -134,10 +130,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{-- <p class="mt-3 mb-0 text-sm">
-                                    <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
-                                    <span class="text-nowrap">Since last month</span>
-                                </p> --}}
                             </div>
                         </div>
                     </div>
@@ -148,7 +140,7 @@
                                 <div class="row">
                                     <div class="col">
                                         <h5 class="card-title text-uppercase text-muted mb-0">Total courses</h5>
-                                        <span class="h2 font-weight-bold mb-0">924</span>
+                                        <span class="h2 font-weight-bold mb-0">{{ $courses->count() }}</span>
                                     </div>
                                     <div class="col-auto">
                                         <div class="icon icon-shape bg-gradient-green text-white rounded-circle shadow">
@@ -166,7 +158,7 @@
                                 <div class="row">
                                     <div class="col">
                                         <h5 class="card-title text-uppercase text-muted mb-0">Total activities</h5>
-                                        <span class="h2 font-weight-bold mb-0">{{$activity->count()}}</span>
+                                        <span class="h2 font-weight-bold mb-0">{{$activities->count()}}</span>
                                     </div>
                                     <div class="col-auto">
                                         <div class="icon icon-shape bg-gradient-info text-white rounded-circle shadow">
@@ -201,52 +193,54 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="table-responsive">
-                                    <!-- Projects table -->
-                                    <table class="table align-items-center table-flush">
-                                        <thead class="thead-light">
-                                            <tr>
-                                                <th scope="col">Name</th>
-                                                <th scope="col">Username</th>
-                                                <th scope="col">Email</th>
-                                                <th scope="col">Course</th>
-                                                <th scope="col">Edit</th>
-                                                <th scope="col">Delete</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($teachers as $teacher)
-                                            <tr>
-                                                <th scope="row">
-                                                    {{ $teacher->name}}
-                                                </th>
-                                                <th scope="row">
-                                                    {{ $teacher->username}}
-                                                </th>
-                                                <th scope="row">
-                                                    {{ $teacher->email}}
-                                                </th>
-                                                <td>
-                                                    {{-- {{$teacher->course->name}} --}}
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-sm btn-secondary" type="button"
-                                                        data-toggle="modal"
-                                                        data-target="#editTeacherModal">Edit</button>
-                                                </td>
-                                                <td>
-                                                    <form action="{{ route('delete.teacher', $teacher) }}"
-                                                        method="post">
-                                                        @csrf
-                                                        <button type="submit"
-                                                            class="btn btn-sm btn-danger">Delete</button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
+                                @if ($teachers->count())
+                                    <div class="table-responsive">
+                                        <!-- Projects table -->
+                                        <table class="table align-items-center table-flush">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th scope="col">Name</th>
+                                                    <th scope="col">Username</th>
+                                                    <th scope="col">Email</th>
+                                                    <th scope="col">Edit</th>
+                                                    <th scope="col">Delete</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($teachers as $teacher)
+                                                    <tr>
+                                                        <td scope="row">
+                                                            {{ $teacher->name}}
+                                                        </td>
+                                                        <td scope="row">
+                                                            {{ $teacher->username}}
+                                                        </td>
+                                                        <td scope="row">
+                                                            {{ $teacher->email}}
+                                                        </td>
+                                                        <td>
+                                                            <button class="btn btn-sm btn-secondary" type="button"
+                                                                data-toggle="modal"
+                                                                data-target="#editTeacherModal">Edit</button>
+                                                        </td>
+                                                        <td>
+                                                            <form action="{{ route('delete.teacher', $teacher) }}"
+                                                                method="post">
+                                                                @csrf
+                                                                <button type="submit"
+                                                                    class="btn btn-sm btn-danger">Delete</button>
+                                                            </form>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                @else
+                                    <p class="px-5">No teacher registered.</p>
+                                @endif
+
+
                             </div>
                         </div>
                         <div class="col-4">
@@ -407,108 +401,110 @@
             </div>
 
             <!-- Modal For Editing Teacher-->
-            <div class="modal fade" id="editTeacherModal" tabindex="-1" data-backdrop="static"
-                aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Add Teacher</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
+            @foreach($teachers as $teacher)
+                <div class="modal fade" id="editTeacherModal" tabindex="-1" data-backdrop="static"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Add Teacher</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
 
-                            <form action="{{ route('update.teacher', $teacher) }}" method="POST">
-                                @csrf
-                                <div class="form-group">
-                                    <div class="input-group input-group-merge input-group-alternative mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                                <form action="{{ route('update.teacher', $teacher) }}" method="POST">
+                                    @csrf
+                                    <div class="form-group">
+                                        <div class="input-group input-group-merge input-group-alternative mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                                            </div>
+                                            <input type="text" name="name"
+                                                class="form-control @error('name') border border-danger @enderror"
+                                                value="{{ $teacher->name }}" placeholder="Name">
                                         </div>
-                                        <input type="text" name="name"
-                                            class="form-control @error('name') border border-danger @enderror"
-                                            value="{{ $teacher->name }}" placeholder="Name">
+                                        <div>
+                                            @error('name')
+                                            <div class="text-danger pt-0 mt-0">
+                                                {{ $message }}
+                                            </div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group input-group-merge input-group-alternative mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                                            </div>
+                                            <input type="text" name="username"
+                                                class="form-control @error('username') border border-danger @enderror"
+                                                value="{{ $teacher->username }}" placeholder="Username">
+                                        </div>
+                                        <div>
+                                            @error('username')
+                                            <div class="text-danger">
+                                                {{ $message }}
+                                            </div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group input-group-merge input-group-alternative mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                                            </div>
+                                            <input name="email" type="email"
+                                                class="form-control @error('email') border border-danger @enderror"
+                                                value="{{ $teacher->email }}" placeholder="Email">
+                                        </div>
                                     </div>
                                     <div>
-                                        @error('name')
-                                        <div class="text-danger pt-0 mt-0">
+                                        @error('email')
+                                        <span class="text-danger">
                                             {{ $message }}
-                                        </div>
+                                        </span>
                                         @enderror
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="input-group input-group-merge input-group-alternative mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="ni ni-hat-3"></i></span>
+                                    <div class="form-group">
+                                        <div class="input-group input-group-merge input-group-alternative">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                                            </div>
+                                            <input name="password" type="password" class="form-control"
+                                                placeholder="Password">
+                                            <div class="input-group-text"><small>Minimum of 5 characters</small></div>
                                         </div>
-                                        <input type="text" name="username"
-                                            class="form-control @error('username') border border-danger @enderror"
-                                            value="{{ $teacher->username }}" placeholder="Username">
                                     </div>
                                     <div>
-                                        @error('username')
+                                        @error('password')
                                         <div class="text-danger">
                                             {{ $message }}
                                         </div>
                                         @enderror
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="input-group input-group-merge input-group-alternative mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                                    <div class="form-group">
+                                        <div class="input-group input-group-merge input-group-alternative">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                                            </div>
+                                            <input type="password" name="password_confirmation" class="form-control"
+                                                placeholder="Confirm Password">
                                         </div>
-                                        <input name="email" type="email"
-                                            class="form-control @error('email') border border-danger @enderror"
-                                            value="{{ $teacher->email }}" placeholder="Email">
                                     </div>
-                                </div>
-                                <div>
-                                    @error('email')
-                                    <span class="text-danger">
-                                        {{ $message }}
-                                    </span>
-                                    @enderror
-                                </div>
-                                <div class="form-group">
-                                    <div class="input-group input-group-merge input-group-alternative">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
-                                        </div>
-                                        <input name="password" type="password" class="form-control"
-                                            placeholder="Password">
-                                        <div class="input-group-text"><small>Minimum of 5 characters</small></div>
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-primary mt-4">UpdateTeacher</button>
                                     </div>
-                                </div>
-                                <div>
-                                    @error('password')
-                                    <div class="text-danger">
-                                        {{ $message }}
-                                    </div>
-                                    @enderror
-                                </div>
-                                <div class="form-group">
-                                    <div class="input-group input-group-merge input-group-alternative">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
-                                        </div>
-                                        <input type="password" name="password_confirmation" class="form-control"
-                                            placeholder="Confirm Password">
-                                    </div>
-                                </div>
-                                <div class="text-center">
-                                    <button type="submit" class="btn btn-primary mt-4">UpdateTeacher</button>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            @endforeach
 
             <!-- Modal For Adding roles -->
             <div class="modal fade" id="addRoleModal" tabindex="-1" data-backdrop="static"
